@@ -61,7 +61,7 @@ contract CrowdFunding{
   
    function refund() public {
        require(block.timestamp > deadline && raiseAmount < target , "you are not eligble to refund");
-       require(Contributors[msg.sender]>0);//person who initiated refund must be a contributor
+       require(Contributors[msg.sender]>0,"Contributor not contributed");//person who initiated refund must be a contributor
        address payable user = payable(msg.sender);// converting msg.sender to payable
        user.transfer(Contributors[msg.sender]);// transfer the amount to contributer who initiated the refund
        Contributors[msg.sender] = 0;
@@ -96,8 +96,8 @@ contract CrowdFunding{
        function makePayment(uint _requestNo) public onlyMnager{
            require(raiseAmount >= target);
            Request storage thisRequest=requests[_requestNo];
-           require(thisRequest.isCompleted==false ,"Already dirtibuted amount");
-           require(thisRequest.noOfVoters > noOfContributors/2 , "Majority does not support");
+           require(thisRequest.isCompleted==false ,"Amount dirtibuted already ");
+           require(thisRequest.noOfVoters > noOfContributors/2 , "Majority should be support ie 50%");
            thisRequest.recipient.transfer(thisRequest.value);
            thisRequest.isCompleted=true;
           
